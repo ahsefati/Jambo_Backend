@@ -1,14 +1,5 @@
 import mongoose from "mongoose";
 
-
-const walletItemSchema = new mongoose.Schema({
-    id: String,
-    balance: {
-      type: mongoose.Types.Decimal128,
-      default: 0.0
-    }
-});
-
 const userSchema = mongoose.Schema({
     name: {type: String, required: true},
     email: {type: String, required: true},
@@ -23,16 +14,10 @@ const userSchema = mongoose.Schema({
     website: {type:String, default: null},
     theme: {type: Boolean, default: false},
     visibility: {type: Boolean, default: true},
-    balance: {type: Number, default: 0},
-    points: {type: Number, default: 0},
     avatar: {type: String, default:"avatar_13.jpg"},
     joined: {
         type: Date,
         default: new Date()
-    },
-    savedTools: {
-        type: Array,
-        default: []
     },
 })
 

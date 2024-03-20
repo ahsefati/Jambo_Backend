@@ -127,7 +127,6 @@ export const changeUserPass = async (req, res) => {
     if (!req.userId) return res.json({message: 'Unauthenticated'})
 
     const {currentPass, newPass} = req.body
-    console.log(currentPass, newPass)
     const user = await User.findById(req.userId)
 
     // Check if the current password is correct:

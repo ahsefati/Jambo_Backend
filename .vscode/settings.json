@@ -1,0 +1,5 @@
+{
+    "docify.translateService.programmingLanguage": "auto-detect",
+    "docify.translateService.docstringFormat": "JavaDoc",
+    "docify.commentService.moreExpressiveComments": false
+}

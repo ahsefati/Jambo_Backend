@@ -1,38 +1,37 @@
-import express, { query } from "express";
-import bodyParser from "body-parser";
-import mongoose from "mongoose";
-import cors from 'cors';
-import dotenv from 'dotenv'
-import postRoutes from './routes/posts.js'
-import userRoutes from './routes/users.js'
-import toolRoutes from './routes/tools.js'
-import pointsRoutes from './routes/points.js'
+// Importing necessary modules and dependencies
+import express, { query } from "express"; // Importing Express framework and query object
+import bodyParser from "body-parser"; // Importing body-parser for parsing request bodies
+import mongoose from "mongoose"; // Importing mongoose for MongoDB interaction
+import cors from 'cors'; // Importing cors for enabling Cross-Origin Resource Sharing
+import dotenv from 'dotenv'; // Importing dotenv for environment variables
+import userRoutes from './routes/users.js'; // Importing user routes
+import wikiRoutes from './routes/wiki.js'; // Importing wiki routes
+import weatherRoutes from './routes/weather.js'; // Importing weather routes
 
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
-const { db, pgp } = require('./pgdb.cjs');
+dotenv.config(); // Loading environment variables from a .env file
 
-dotenv.config()
-const app = express();
-app.use(bodyParser.json({limit:"30mb", extended: true}))
-app.use(bodyParser.urlencoded({limit:"30mb", extended:true}))
-app.use(cors())
+const app = express(); // Creating an instance of the Express application
 
+// Setting up middleware
+app.use(bodyParser.json({limit:"30mb", extended: true})); // Parsing JSON requests with a body size limit of 30mb
+app.use(bodyParser.urlencoded({limit:"30mb", extended:true})); // Parsing URL-encoded requests with a body size limit of 30mb
+app.use(cors()); // Enabling CORS for cross-origin requests
 
+// Setting up a basic route for testing server availability
 app.get('/', (req, res) => {
-        res.send('APP is running!!')
-})
+    res.send('APP is running!!');
+});
 
-app.use('/posts', postRoutes)
-app.use('/users', userRoutes)
-app.use('/tools', toolRoutes)
-app.use('/points', pointsRoutes)
+// Defining routes for different functionalities
+app.use('/users', userRoutes); // Routes for user-related operations
+app.use('/wiki', wikiRoutes); // Routes for wiki-related operations
+app.use('/weather', weatherRoutes); // Routes for weather-related operations
 
-const CONNECTION_URL = process.env.CONNECTION_URL
-const PORT = process.env.PORT || 5000;
+// Setting up MongoDB connection
+const CONNECTION_URL = process.env.CONNECTION_URL; // MongoDB connection URL from environment variables
+const PORT = process.env.PORT; // Port to run the server on from environment variables
 
-mongoose.set('strictQuery', false)
-mongoose.connect( CONNECTION_URL, {useNewUrlParser: true, useUnifiedTopology: true})
-        .then(()=> app.listen(PORT, () => console.log("Server is running.")))
-        .catch((err) => console.log(err.message))
-    
+mongoose.set('strictQuery', false); // Setting mongoose to allow strict queries
+mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true }) // Connecting to MongoDB
+    .then(() => app.listen(PORT, () => console.log("DB Connected and Server is Running."))) // Listening for connections once connected to MongoDB
+    .catch((err) => console.log(err.message)); // Handling errors if connection fails
